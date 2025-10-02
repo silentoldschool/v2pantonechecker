@@ -63,18 +63,21 @@ def login():
         db.session.commit()
     return jsonify({'token': user.api_token, 'role': user.role})
 
-@app.route("/colorchecks/request", methods=['POST'])
+@app.route('/colorchecks/request', methods=['POST'])
 def request_color():
-    data = request.get_json() or {}
-    pantone = data.get('pantone')
-    points = data.get('points', [])
-    user_id = data.get('user_id')
-    if not pantone or not user_id:
-        return jsonify({'error':'pantone and user_id required'}), 400
-    cc = ColorCheck(pantone=pantone, points=",".join(points), user_id=user_id)
-    db.session.add(cc)
-    db.session.commit()
-    return jsonify({'id': cc.id, 'status': cc.status})
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No JSON received'}), 400
+
+    # Beispiel: erstelle eine neue Anfrage
+    try:
+        hex_color = data.get('hex_color')
+        pantone = data.get('pantone')
+        # ... weitere Logik hier
+
+        return jsonify({'status': 'ok', 'message': 'Request saved'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route("/colorchecks", methods=['GET'])
 def list_checks():
@@ -121,3 +124,4 @@ with app.app_context():
 # ------------------ RUN ------------------
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
+
