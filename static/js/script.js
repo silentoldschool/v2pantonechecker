@@ -1,61 +1,53 @@
-let token = "";
-let role = "";
-
-function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    }).then(res => res.json())
-      .then(data => {
-        if(data.token){
-            token = data.token;
-            role = data.role;
-            document.getElementById("loginDiv").style.display = "none";
-            document.getElementById("mainDiv").style.display = "block";
-            fetchColors();
-        } else {
-            alert("Login fehlgeschlagen");
-        }
-    });
+const API_TOKEN = localStorage.getItem("api_token");
+if(!API_TOKEN && !window.location.href.includes("login.html")){
+    window.location.href="login.html";
 }
 
-function fetchColors() {
-    fetch("/colorchecks", {
-        headers: { "Authorization": "Token " + token }
-    }).then(res => res.json())
-      .then(data => {
-        const table = document.getElementById("colorTable");
-        table.innerHTML = "<tr><th>Pantone</th><th>Hex</th><th>Points</th><th>Status</th><th>Alt Farbe</th></tr>";
-        data.forEach(c => {
-            const row = table.insertRow();
-            row.insertCell(0).innerText = c.pantone;
-            row.insertCell(1).innerHTML = `<div style="width:30px;height:20px;background:${c.hex_color || '#fff'};"></div>`;
-            row.insertCell(2).innerText = c.points.join(", ");
-            row.insertCell(3).innerText = c.status;
-            row.insertCell(4).innerText = c.alt_color || "";
+async function fetchColors(){
+    try{
+        const res = await fetch("/colorchecks", {
+            headers:{'X-API-TOKEN': API_TOKEN}
         });
-    });
+        const data = await res.json();
+        const tbody = document.querySelector("#colorTable tbody");
+        tbody.innerHTML="";
+        data.forEach(c=>{
+            const tr = document.createElement("tr");
+            const points = (c.points||[]).join(", ");
+            const colorBox = `<span class="color-field" style="background:${c.hex_color||'#fff'}"></span>`;
+            tr.innerHTML = `<td>${c.id}</td><td>${c.pantone}</td><td>${colorBox}</td><td>${c.status}</td><td>${points}</td><td>${c.alternative_hex||''}</td>`;
+            tbody.appendChild(tr);
+        });
+    }catch(e){
+        console.error(e);
+    }
 }
 
-function sendRequest() {
-    const pantone = document.getElementById("pantoneInput").value;
-    const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
-    const points = Array.from(checkboxes).map(c => c.value);
+async function sendRequest(){
+    const pantone = document.getElementById("pantone").value;
+    const points = [];
+    if(document.getElementById("point1").checked) points.push("Testliner weiß Coated");
+    if(document.getElementById("point2").checked) points.push("Testliner braun");
+    if(document.getElementById("point3").checked) points.push("Kraftliner braun");
 
-    fetch("/colorchecks/request", {
-        method: "POST",
-        headers: { 
-            "Content-Type": "application/json",
-            "Authorization": "Token " + token
-        },
-        body: JSON.stringify({ pantone, points, user_id: 1 })
-    }).then(res => res.json())
-      .then(data => {
-        alert("Anfrage gesendet!");
+    const res = await fetch("/colorchecks/request", {
+        method:"POST",
+        headers:{'Content-Type':'application/json','X-API-TOKEN': API_TOKEN},
+        body: JSON.stringify({pantone, points})
+    });
+    const data = await res.json();
+    const msg = document.getElementById("request-msg");
+    if(res.ok){
+        msg.innerText = "Farbe angefragt! ID: " + data.id;
         fetchColors();
-    });
+    } else {
+        msg.innerText = "Fehler: "+(data.error||"");
+    }
 }
+
+function logout(){
+    localStorage.removeItem("api_token");
+    window.location.href="login.html";
+}
+
+fetchColors();
