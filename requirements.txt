@@ -2,4 +2,4 @@ Flask
 Flask-SQLAlchemy
 Flask-CORS
 Werkzeug
-gunicorn
+psycopg2-binary
