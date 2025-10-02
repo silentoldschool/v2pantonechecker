@@ -1,69 +1,7 @@
-/* Allgemeine Grundstile */
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Login-Container */
-.login-container {
-    background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-    width: 350px;
-    text-align: center;
-}
-
-.login-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333333;
-}
-
-/* Formularelemente */
-.login-container label {
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555555;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-.login-container button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007BFF;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.login-container button:hover {
-    background-color: #0056b3;
-}
-
-/* Meldungen */
-#message {
-    margin-top: 10px;
-    font-size: 14px;
-    color: red;
-}
+body { font-family: Arial, sans-serif; margin:20px; background:#f5f5f5; }
+.header { display:flex; justify-content: space-between; align-items:center; margin-bottom:20px; }
+.color-list table { border-collapse: collapse; width: 100%; background:white; }
+.color-list th, .color-list td { border:1px solid #ccc; padding:8px; text-align:center; }
+.color-field { width:40px; height:20px; display:inline-block; border:1px solid #000; }
+.login-container, .color-request { background:white; padding:20px; margin-bottom:20px; border-radius:8px; }
+button { padding:6px 12px; cursor:pointer; margin-top:5px; }
