@@ -3,32 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <title>PantoneChecker</title>
-<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-<h1>PantoneChecker</h1>
-
-<div id="loginDiv">
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+<div class="header">
+    <h1>PantoneChecker</h1>
+    <button onclick="logout()">Logout</button>
 </div>
 
-<div id="mainDiv" style="display:none;">
-  <h2>Farb-Anfragen</h2>
-  <div>
-    <input type="text" id="pantoneInput" placeholder="Pantone z.B. P 0186 U">
-    <label><input type="checkbox" value="Testliner weiß">Testliner weiß</label>
-    <label><input type="checkbox" value="Kraftliner braun">Kraftliner braun</label>
+<div class="color-request">
+    <h2>Neue Farb-Anfrage</h2>
+    <input type="text" id="pantone" placeholder="Pantone z.B. P 0186 U">
+    <label>Punkte:</label><br>
+    <input type="checkbox" id="point1" value="Testliner weiß Coated"> Testliner weiß Coated
+    <input type="checkbox" id="point2" value="Testliner braun"> Testliner braun
+    <input type="checkbox" id="point3" value="Kraftliner braun"> Kraftliner braun<br>
     <button onclick="sendRequest()">Anfrage senden</button>
-  </div>
-
-  <h2>Liste Farben</h2>
-  <table id="colorTable" border="1">
-    <tr><th>Pantone</th><th>Hex</th><th>Points</th><th>Status</th><th>Alt Farbe</th></tr>
-  </table>
+    <p id="request-msg"></p>
 </div>
 
-<script src="/static/js/script.js"></script>
+<div class="color-list">
+    <h2>Farbenliste</h2>
+    <table id="colorTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pantone</th>
+                <th>Farbe</th>
+                <th>Status</th>
+                <th>Punkte</th>
+                <th>Alternative</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script src="static/js/script.js"></script>
 </body>
 </html>
